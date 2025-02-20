@@ -1,0 +1,25 @@
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  // Fetch API Key from backend
+  fetch("http://localhost:8080/api/razorpay/getResponse")
+    .then(response => response.json())
+    .then(data => {
+      var options = {
+        "key": data.key,  // Dynamically fetched API Key
+        "amount": data.amount,
+        "currency": data.currency,
+       
+        "description": "you are doing the transaction for",
+        "order_id": data.id,
+        "handler": function (response) {
+          alert("Payment ID: " + response.amount);
+          alert("Order ID: " + response.order_id);
+          alert("Signature: " + response.description);
+        },
+        "theme": { "color": "#3399cc" }
+      };
+      var rzp1 = new Razorpay(options);
+      rzp1.open();
+    })
+    .catch(error => console.error("Error fetching API key:", error));
+</script>
